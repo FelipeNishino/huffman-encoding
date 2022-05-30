@@ -1,6 +1,6 @@
 DIR := ${CURDIR}
 
-exec = a.out
+exec = huffenc
 sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
 flags = -g -Wall -fPIC -std=c99
@@ -15,5 +15,5 @@ clean:
 	-rm *.out
 	-rm *.o
 	-rm *.a
+	-rm $(exec)
 	-rm src/*.o
-
