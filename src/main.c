@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "include/huffman.h"
-#include "include/macros.h"
-#include "include/verbose.h"
+#include "huffman.h"
+#include "macros.h"
+#include "verbose.h"
 
 int main(int argc, const char** argv) {
 	huffman_option option;
+	// Extrai as opcoes nos argumentos para o algoritmo
+	if (argc < 2) error("Please provide adequate arguments.");
 
 	if (strncmp(argv[1], OPTION_DECOMPRESS, OPTION_DECOMPRESS_SIZE) == 0) option = decompress;
 	else if (strncmp(argv[1], OPTION_COMPRESS, OPTION_COMPRESS_SIZE) == 0) option = compress;

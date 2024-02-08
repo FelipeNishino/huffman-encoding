@@ -5,7 +5,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/string_to_int.h"
+#include "string_to_int.h"
 
 /* Convert string s to int out.
  *

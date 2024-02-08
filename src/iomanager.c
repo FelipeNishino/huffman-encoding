@@ -1,9 +1,36 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "include/iomanager.h"
+#include <stdarg.h>
+#include "iomanager.h"
 
-char *iomanager_getInputFromFile(const char *filename){ 
+void
+iomanager_raise_error(const char* err_str, ...) {
+    va_list args;
+    va_start(args, err_str);
+    char* format = "[iomanager.c]: %s\n";
+
+    char* str = malloc((strlen(format) + strlen(err_str) + 8) * sizeof(char));
+    sprintf(str, format, err_str);
+
+    vfprintf(stderr, str, args);
+
+    va_end(args);
+    free(str);
+    exit(1);
+}
+
+void
+iomanager_assert_file_extension(const char* filename, const char* ext) {
+    int filename_size = strlen(filename);
+    int etx_size = strlen(ext);
+    const char* extension = &filename[filename_size - etx_size];
+    if (strcmp(extension, ext) != 0)
+        iomanager_raise_error("Invalid extension for given file, expected '%s'.\n", ext);
+}
+
+char *
+iomanager_getInputFromFile(const char *filename){ 
     FILE *fp;
     char basename[20] = "./";
     char lineBuffer[256];
@@ -14,10 +41,9 @@ char *iomanager_getInputFromFile(const char *filename){
     strcat(basename, filename);
     fp = fopen(basename, "r");
     // Checa se o fopen foi bem sucedido
-    if (!fp)  {
-        printf("Couldn't find file named '%s', make sure to make the extension explicit.", filename);
-        exit(1);
-    }
+    if (!fp)
+        iomanager_raise_error("Couldn't find file named '%s'", filename);
+
     
     // printf("Opened input file successfully, reading contents...\n");
 
@@ -38,7 +64,8 @@ char *iomanager_getInputFromFile(const char *filename){
     return input;
 }
 
-char *iomanager_getInputFromStdin() {
+char *
+iomanager_getInputFromStdin() {
     int nChars = 0, bufferLimit = 1024;
     char currentChar;
     char auxStr[2] = {0};
